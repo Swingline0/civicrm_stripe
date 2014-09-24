@@ -169,12 +169,10 @@ function stripe_add_stripe_js($form) {
       }
   }
 
-  // Add Stripe publishable key to CRM.stripe namespace.
-  CRM_Core_Resources::singleton()->addSetting(array(
-    'stripe' => array(
-      'pub_key' => $stripe_pub_key,
-    )
-  ));
+  // Add Stripe publishable key to CRM.stripe namespace, using hack as the proper Civi way doesn't seem to be working
+  echo "<script>CRM = window.CRM || {}; CRM.stripe = window.CRM.stripe || {}; CRM.stripe.pub_key = '$stripe_pub_key';</script>";
+  echo "<script>CRM = window.CRM || {}; CRM.billing = window.CRM.billing || {}; CRM.billing.billingProfileIsHideable  = true</script>";
+
 }
 
 /**
