@@ -156,17 +156,8 @@ class CRM_Core_Payment_Stripe extends CRM_Core_Payment {
       $error_message .= 'Code: ' . $err['code'] . '<br />';
       $error_message .= 'Message: ' . $err['message'] . '<br />';
 
-      // Check Event vs Contribution for redirect.  There must be a better way.
-      if (empty($params['selectMembership'])
-        && empty($params['contributionPageID'])
-      ) {
-        $error_url = CRM_Utils_System::url('civicrm/event/register',
-          "_qf_Main_display=1&cancel=1&qfKey={$qfKey}", FALSE, NULL, FALSE);
-      }
-      else {
-        $error_url = CRM_Utils_System::url('civicrm/contribute/transact',
-          "_qf_Main_display=1&cancel=1&qfKey={$qfKey}", FALSE, NULL, FALSE);
-      }
+      $error_url = CRM_Utils_System::url($_REQUEST['q'],
+        "_qf_Main_display=1&cancel=1&qfKey={$qfKey}", FALSE, NULL, FALSE);
 
       CRM_Core_Error::statusBounce("Oops!  Looks like there was an error.  Payment Response:
         <br /> $error_message", $error_url);
@@ -195,16 +186,8 @@ class CRM_Core_Payment_Stripe extends CRM_Core_Payment {
       $error_message .= 'Code: ' . $err['code'] . "<br />";
       $error_message .= 'Message: ' . $err['message'] . "<br />";
 
-      if (empty($params['selectMembership'])
-        && empty($params['contributionPageID'])
-      ) {
-        $error_url = CRM_Utils_System::url('civicrm/event/register',
-          "_qf_Main_display=1&cancel=1&qfKey={$qfKey}", FALSE, NULL, FALSE);
-      }
-      else {
-        $error_url = CRM_Utils_System::url('civicrm/contribute/transact',
-          "_qf_Main_display=1&cancel=1&qfKey={$qfKey}", FALSE, NULL, FALSE);
-      }
+      $error_url = CRM_Utils_System::url($_REQUEST['q'],
+        "_qf_Main_display=1&cancel=1&qfKey={$qfKey}", FALSE, NULL, FALSE);
 
       CRM_Core_Error::statusBounce("Oops!  Looks like there was an error.  Payment Response:
         <br /> $error_message", $error_url);
@@ -426,14 +409,9 @@ class CRM_Core_Payment_Stripe extends CRM_Core_Payment {
     }
     else {
       // There was no response from Stripe on the create charge command.
-      if (empty($params['selectMembership']) && empty($params['contributionPageID'])) {
-        $error_url = CRM_Utils_System::url('civicrm/event/register',
-          '_qf_Main_display=1&cancel=1&qfKey=' . $params['qfKey'], FALSE, NULL, FALSE);
-      }
-      else {
-        $error_url = CRM_Utils_System::url('civicrm/contribute/transact',
-          '_qf_Main_display=1&cancel=1&qfKey=' . $params['qfKey'], FALSE, NULL, FALSE);
-      }
+      $error_url = CRM_Utils_System::url($_REQUEST['q'],
+        "_qf_Main_display=1&cancel=1&qfKey={$qfKey}", FALSE, NULL, FALSE);
+
       CRM_Core_Error::statusBounce('Stripe transaction response not recieved!  Check the Logs section of your stripe.com account.', $error_url);
     }
 
